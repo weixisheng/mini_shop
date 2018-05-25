@@ -61,7 +61,14 @@ Page({
   onLoad: function () {
     var that = this
     wx.setNavigationBarTitle({
-      title: wx.getStorageSync('mallName')
+      title: '华圣灵魂'
+    })
+    wx.getUserInfo({
+      success: function (userInfo) {
+        that.setData({
+          userInfo: userInfo
+        })
+      }
     })
     wx.request({
       url: 'https://api.it120.cc/' + app.globalData.subDomain + '/banner/list',
@@ -100,6 +107,8 @@ Page({
     })
     that.getCoupons ();
     that.getNotice ();
+  },
+  onShow: function(){
   },
   getGoodsList: function (categoryId) {
     if (categoryId == 0) {

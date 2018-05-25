@@ -155,7 +155,7 @@ Page({
       scope: 'scope.userInfo',
       success() {
         app.globalData.token = null;
-        app.login();
+        that.getUserInfo();
         wx.showModal({
           title: '提示',
           content: '重新登陆成功',
