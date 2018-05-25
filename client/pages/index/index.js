@@ -53,28 +53,16 @@ Page({
     })  
   },
   scroll: function (e) {
-    //  console.log(e) ;
     var that = this,scrollTop=that.data.scrollTop;
     that.setData({
       scrollTop:e.detail.scrollTop
     })
-    // console.log('e.detail.scrollTop:'+e.detail.scrollTop) ;
-    // console.log('scrollTop:'+scrollTop)
   },
   onLoad: function () {
     var that = this
     wx.setNavigationBarTitle({
       title: wx.getStorageSync('mallName')
     })
-    /*
-    //调用应用实例的方法获取全局数据
-    app.getUserInfo(function(userInfo){
-      //更新数据
-      that.setData({
-        userInfo:userInfo
-      })
-    })
-    */
     wx.request({
       url: 'https://api.it120.cc/' + app.globalData.subDomain + '/banner/list',
       data: {
@@ -117,7 +105,6 @@ Page({
     if (categoryId == 0) {
       categoryId = "";
     }
-    console.log(categoryId)
     var that = this;
     wx.request({
       url: 'https://api.it120.cc/'+ app.globalData.subDomain +'/shop/goods/list',
