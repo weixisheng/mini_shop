@@ -63,6 +63,7 @@ Page({
     wx.setNavigationBarTitle({
       title: wx.getStorageSync('mallName')
     })
+    console.log(app.globalData)
     wx.request({
       url: 'https://api.it120.cc/' + app.globalData.subDomain + '/banner/list',
       data: {
@@ -156,7 +157,7 @@ Page({
       url: 'https://api.it120.cc/' + app.globalData.subDomain + '/discounts/fetch',
       data: {
         id: e.currentTarget.dataset.id,
-        token: app.globalData.token
+        token: wx.getStorageSync('token')
       },
       success: function (res) {
         if (res.data.code == 20001 || res.data.code == 20002) {

@@ -53,7 +53,7 @@ Page({
     wx.request({
       url: 'https://api.it120.cc/' + app.globalData.subDomain + '/user/wxapp/bindMobile',
       data: {
-        token: app.globalData.token,
+        token: wx.getStorageSync('token'),
         encryptedData: e.detail.encryptedData,
         iv: e.detail.iv
       },
@@ -80,7 +80,7 @@ Page({
     wx.request({
       url: 'https://api.it120.cc/' + app.globalData.subDomain + '/user/detail',
       data: {
-        token: app.globalData.token
+        token: wx.getStorageSync('token')
       },
       success: function (res) {
         if (res.data.code == 0) {
@@ -98,7 +98,7 @@ Page({
     wx.request({
       url: 'https://api.it120.cc/' + app.globalData.subDomain + '/user/amount',
       data: {
-        token: app.globalData.token
+        token: wx.getStorageSync('token')
       },
       success: function (res) {
         if (res.data.code == 0) {
@@ -117,7 +117,7 @@ Page({
     wx.request({
       url: 'https://api.it120.cc/' + app.globalData.subDomain + '/score/today-signed',
       data: {
-        token: app.globalData.token
+        token: wx.getStorageSync('token')
       },
       success: function (res) {
         if (res.data.code == 0) {
@@ -133,7 +133,7 @@ Page({
     wx.request({
       url: 'https://api.it120.cc/' + app.globalData.subDomain + '/score/sign',
       data: {
-        token: app.globalData.token
+        token: wx.getStorageSync('token')
       },
       success: function (res) {
         if (res.data.code == 0) {

@@ -117,6 +117,7 @@ Page({
             }
             wx.setStorageSync('token', res.data.data.token)
             wx.setStorageSync('uid', res.data.data.uid)
+            app.globalData.token = res.data.data.token
             // 回到原来的地方
             wx.navigateBack();
           }

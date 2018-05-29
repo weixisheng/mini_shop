@@ -79,7 +79,7 @@
         </view>
         <view class="pop-goods-close" bindtap="closePopupTap"></view>
       </view>
-      <view class="size-label-box">
+      <view class="size-label-box" wx:if="goodsDetail.properties.length>0">
         <block wx:for="{{goodsDetail.properties}}" wx:for-item="property" wx:for-index="idx" wx:key="id">
           <view class="label">{{property.name}}</view>
           <view class="label-item-box">
