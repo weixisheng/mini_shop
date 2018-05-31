@@ -194,7 +194,7 @@ Page({
         if (res.data.code == 0) {
           wx.showToast({
             title: '领取成功，赶紧去下单吧~',
-            icon: 'success',
+            icon:'none',
             duration: 2000
           })
         } else {

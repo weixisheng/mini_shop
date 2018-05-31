@@ -32,7 +32,7 @@ Page({
           wx.request({
             url: 'https://api.it120.cc/' + app.globalData.subDomain + '/order/close',
             data: {
-              token: app.globalData.token,
+              token: wx.getStorageSync('token'),
               orderId: orderId
             },
             success: (res) => {
@@ -53,7 +53,7 @@ Page({
     wx.request({
       url: 'https://api.it120.cc/' + app.globalData.subDomain + '/user/amount',
       data: {
-        token: app.globalData.token
+        token: wx.getStorageSync('token')
       },
       success: function (res) {
         if (res.data.code == 0) {
@@ -68,7 +68,7 @@ Page({
                 'content-type': 'application/x-www-form-urlencoded'
               },
               data: {
-                token: app.globalData.token,
+                token: wx.getStorageSync('token'),
                 orderId: orderId
               },
               success: function (res2) {
@@ -102,7 +102,7 @@ Page({
     var that = this;
     wx.request({
       url: 'https://api.it120.cc/' + app.globalData.subDomain + '/order/statistics',
-      data: { token: app.globalData.token },
+      data: { token: wx.getStorageSync('token') },
       success: (res) => {
         wx.hideLoading();
         if (res.data.code == 0) {
@@ -145,7 +145,7 @@ Page({
     wx.showLoading();
     var that = this;
     var postData = {
-      token: app.globalData.token
+      token: wx.getStorageSync('token')
     };
     postData.status = that.data.currentType;
     this.getOrderStatistics();
