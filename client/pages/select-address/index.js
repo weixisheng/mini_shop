@@ -3,59 +3,67 @@
 var app = getApp()
 Page({
   data: {
-    addressList:[]
+    addressList: []
   },
 
   selectTap: function (e) {
     var id = e.currentTarget.dataset.id;
     wx.request({
-      url: 'https://api.it120.cc/'+ app.globalData.subDomain +'/user/shipping-address/update',
+      url: 'https://api.it120.cc/' + app.globalData.subDomain + '/user/shipping-address/update',
       data: {
-        token:app.globalData.token,
-        id:id,
-        isDefault:'true'
+        token: wx.getStorageSync('token'),
+        id: id,
+        isDefault: 'true'
       },
-      success: (res) =>{
-        wx.navigateBack({})
+      success: (res) => {
+        wx.showToast({
+          title: "已设为默认地址",
+          icon: 'success',
+          mask: true,
+          duration: 1500,
+          success: function () {
+            setTimeout(function () {
+              wx.navigateBack({
+              })
+            }, 1500)
+          }
+        })
       }
     })
   },
 
-  addAddess : function () {
+  addAddress: function () {
     wx.navigateTo({
-      url:"/pages/address-add/index"
+      url: "/pages/address-add/index"
     })
   },
-  
-  editAddess: function (e) {
+
+  editAddress: function (e) {
     wx.navigateTo({
       url: "/pages/address-add/index?id=" + e.currentTarget.dataset.id
     })
   },
-  
-  onLoad: function () {
-    console.log('onLoad')
 
-   
+  onLoad: function () {
   },
-  onShow : function () {
+  onShow: function () {
     this.initShippingAddress();
   },
   initShippingAddress: function () {
     var that = this;
     wx.request({
-      url: 'https://api.it120.cc/'+ app.globalData.subDomain +'/user/shipping-address/list',
+      url: 'https://api.it120.cc/' + app.globalData.subDomain + '/user/shipping-address/list',
       data: {
-        token:app.globalData.token
+        token: wx.getStorageSync('token')
       },
-      success: (res) =>{
+      success: (res) => {
         if (res.data.code == 0) {
           that.setData({
-            addressList:res.data.data
+            addressList: res.data.data
           });
-        } else if (res.data.code == 700){
+        } else if (res.data.code == 700) {
           that.setData({
-            addressList: null
+            addressList: []
           });
         }
       }
