@@ -10,7 +10,7 @@ Page({
     yunPrice:0,
     allGoodsAndYunPrice:0,
     goodsJsonStr:"",
-    orderType:"", //订单类型，购物车下单或立即支付下单，默认是购物车，
+    orderType:"cart", //订单类型，购物车下单或立即支付下单，默认是购物车，
 
     hasNoCoupons: true,
     coupons: [],
@@ -189,7 +189,7 @@ Page({
 
     for (let i = 0; i < goodsList.length; i++) {
       let carShopBean = goodsList[i];
-      if (carShopBean.logistics) {
+      if (carShopBean.logisticsType) {
         isNeedLogistics = 1;
       }
       allGoodsPrice += carShopBean.price * carShopBean.number;
