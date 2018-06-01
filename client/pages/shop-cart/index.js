@@ -148,11 +148,7 @@ Page({
             noSelect++;
           }
       }
-      if(noSelect == list.length){
-         return true;
-      }else{
-        return false;
-      }
+      return noSelect == list.length;
    },
    setGoodsList:function(saveHidden,total,allSelect,noSelect,list){
       this.setData({
