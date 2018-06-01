@@ -21,7 +21,88 @@ Page({
     coupons: [],
     searchInput: '',
   },
-
+  onLoad: function () {
+    wx.setNavigationBarTitle({
+      title: wx.getStorageSync('mallName')
+    })
+    this.getBanner();
+    this.getCategory();
+    this.getNotice();
+    this.getCoupons();
+  },
+  getBanner(){
+    var that = this;
+    wx.request({
+      url: 'https://api.it120.cc/' + app.globalData.subDomain + '/banner/list',
+      data: {
+        key: 'mallName'
+      },
+      success: function (res) {
+        if (res.data.code == 404) {
+          wx.showModal({
+            title: '提示',
+            content: '请在后台添加 banner 轮播图片',
+            showCancel: false
+          })
+        } else {
+          that.setData({
+            banners: res.data.data
+          });
+        }
+      }
+    })
+  },
+  getCategory(){
+    var that = this;
+    wx.request({
+      url: 'https://api.it120.cc/' + app.globalData.subDomain + '/shop/goods/category/all',
+      success: function (res) {
+        var categories = [{ id: 0, name: "全部" }];
+        if (res.data.code == 0) {
+          // for (var i = 0; i < res.data.data.length; i++) {
+          //   categories.push(res.data.data[i]);
+          // }
+          categories = [...categories, ...res.data.data];
+        }
+        that.setData({
+          categories: categories,
+          activeCategoryId: 0
+        });
+        that.getGoodsList(0);
+      }
+    })
+  },
+  getNotice: function () {
+    var that = this;
+    wx.request({
+      url: 'https://api.it120.cc/' + app.globalData.subDomain + '/notice/list',
+      data: { pageSize: 5 },
+      success: function (res) {
+        if (res.data.code == 0) {
+          that.setData({
+            noticeList: res.data.data
+          });
+        }
+      }
+    })
+  },
+  getCoupons: function () {
+    var that = this;
+    wx.request({
+      url: 'https://api.it120.cc/' + app.globalData.subDomain + '/discounts/coupons',
+      data: {
+        type: ''
+      },
+      success: function (res) {
+        if (res.data.code == 0) {
+          that.setData({
+            hasNoCoupons: false,
+            coupons: res.data.data
+          });
+        }
+      }
+    })
+  },
   tabClick: function (e) {
     this.setData({
       activeCategoryId: e.currentTarget.id
@@ -58,49 +139,6 @@ Page({
       scrollTop:e.detail.scrollTop
     })
   },
-  onLoad: function () {
-    var that = this
-    wx.setNavigationBarTitle({
-      title: wx.getStorageSync('mallName')
-    })
-    wx.request({
-      url: 'https://api.it120.cc/' + app.globalData.subDomain + '/banner/list',
-      data: {
-        key: 'mallName'
-      },
-      success: function(res) {
-        if (res.data.code == 404) {
-          wx.showModal({
-            title: '提示',
-            content: '请在后台添加 banner 轮播图片',
-            showCancel: false
-          })
-        } else {
-          that.setData({
-            banners: res.data.data
-          });
-        }
-      }
-    })
-    wx.request({
-      url: 'https://api.it120.cc/'+ app.globalData.subDomain +'/shop/goods/category/all',
-      success: function(res) {
-        var categories = [{id:0, name:"全部"}];
-        if (res.data.code == 0) {
-          for (var i = 0; i < res.data.data.length; i++) {
-            categories.push(res.data.data[i]);
-          }
-        }
-        that.setData({
-          categories:categories,
-          activeCategoryId:0
-        });
-        that.getGoodsList(0);
-      }
-    })
-    that.getCoupons ();
-    that.getNotice ();
-  },
   getGoodsList: function (categoryId) {
     if (categoryId == 0) {
       categoryId = "";
@@ -130,23 +168,6 @@ Page({
         that.setData({
           goods:goods,
         });
-      }
-    })
-  },
-  getCoupons: function () {
-    var that = this;
-    wx.request({
-      url: 'https://api.it120.cc/' + app.globalData.subDomain + '/discounts/coupons',
-      data: {
-        type: ''
-      },
-      success: function (res) {
-        if (res.data.code == 0) {
-          that.setData({
-            hasNoCoupons: false,
-            coupons: res.data.data
-          });
-        }
       }
     })
   },
@@ -219,25 +240,10 @@ Page({
       }
     }
   },
-  getNotice: function () {
-    var that = this;
-    wx.request({
-      url: 'https://api.it120.cc/' + app.globalData.subDomain + '/notice/list',
-      data: { pageSize :5},
-      success: function (res) {
-        if (res.data.code == 0) {
-          that.setData({
-            noticeList: res.data.data
-          });
-        }
-      }
-    })
-  },
   listenerSearchInput: function (e) {
     this.setData({
       searchInput: e.detail.value
     })
-
   },
   toSearch : function (){
     this.getGoodsList(this.data.activeCategoryId);
