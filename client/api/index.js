@@ -5,7 +5,6 @@ var api = {
   // 首页
   bannerList:`${url}/banner/list`,
   categoryAll: `${url}/shop/goods/category/all`,
-  noticeList: `${url}/notice/list`,
   discountCoupons: `${url}/discounts/coupons`,
   goodsList: `${url}/shop/goods/list`,
   fetchDiscount: `${url}/discounts/fetch`,
@@ -29,5 +28,10 @@ var api = {
   goodsPrice: `${url}/shop/goods/price`,
   goodsReputation: `${url}/shop/goods/reputation`,
   goodsVideo: `${url}/media/video/detail`,
+
+  //资讯
+  noticeList: `${url}/notice/list`,
+  noticeDetail: `${url}/notice/detail`,
+
 }
 module.exports = api;

@@ -1,6 +1,6 @@
 var app = getApp();
 var WxParse = require('../../wxParse/wxParse.js');
-
+var api = require('../../api/index.js')
 Page({
 
   /**
@@ -16,7 +16,7 @@ Page({
   onLoad: function (options) {
     var that = this;
     wx.request({
-      url: 'https://api.it120.cc/' + app.globalData.subDomain + '/notice/detail',
+      url: api.noticeDetail,
       data: {
         id: options.id
       },
