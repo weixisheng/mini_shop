@@ -38,10 +38,14 @@ var api = {
   myCoupons: `${url}/discounts/my`,
 
   //订单
+  orderList: `${url}/order/list`,
   createOrder: `${url}/order/create`,
   orderDetail: `${url}/order/detail`,
   orderDelivery: `${url}/order/delivery`,
   orderReputation: `${url}/order/reputation`,
+  orderClose: `${url}/order/close`,
+  orderPay: `${url}/order/pay`,
+  orderStatistics: `${url}/order/statistics`,
 
   //提现
   withDraw: `${url}/user/withDraw/apply`,

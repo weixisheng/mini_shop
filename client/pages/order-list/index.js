@@ -1,5 +1,6 @@
 var wxpay = require('../../utils/pay.js')
 var app = getApp()
+var api = require('../../api/index.js')
 Page({
   data:{
     statusType: ["待付款", "待发货", "待收货", "待评价", "已完成"],
@@ -30,7 +31,7 @@ Page({
         if (res.confirm) {
           wx.showLoading();
           wx.request({
-            url: 'https://api.it120.cc/' + app.globalData.subDomain + '/order/close',
+            url: api.orderClose,
             data: {
               token: wx.getStorageSync('token'),
               orderId: orderId
@@ -51,7 +52,7 @@ Page({
     var orderId = e.currentTarget.dataset.id;
     var money = e.currentTarget.dataset.money;
     wx.request({
-      url: 'https://api.it120.cc/' + app.globalData.subDomain + '/user/amount',
+      url: api.userAmount,
       data: {
         token: wx.getStorageSync('token')
       },
@@ -62,7 +63,7 @@ Page({
           if (money <= 0) {
             // 直接使用余额支付
             wx.request({
-              url: 'https://api.it120.cc/' + app.globalData.subDomain + '/order/pay',
+              url: api.orderPay,
               method:'POST',
               header: {
                 'content-type': 'application/x-www-form-urlencoded'
@@ -101,7 +102,7 @@ Page({
   getOrderStatistics : function () {
     var that = this;
     wx.request({
-      url: 'https://api.it120.cc/' + app.globalData.subDomain + '/order/statistics',
+      url: api.orderStatistics,
       data: { token: wx.getStorageSync('token') },
       success: (res) => {
         wx.hideLoading();
@@ -150,7 +151,7 @@ Page({
     postData.status = that.data.currentType;
     this.getOrderStatistics();
     wx.request({
-      url: 'https://api.it120.cc/' + app.globalData.subDomain + '/order/list',
+      url: api.orderList,
       data: postData,
       success: (res) => {
         wx.hideLoading();
