@@ -1,5 +1,6 @@
 //index.js
 var app = getApp()
+var api = require('../../api/index.js')
 Page({
   data: {
     goodsList:{
@@ -277,7 +278,7 @@ Page({
         // 获取价格和库存
         if (!carShopBean.propertyChildIds || carShopBean.propertyChildIds == "") {
           wx.request({
-            url: 'https://api.it120.cc/'+ app.globalData.subDomain +'/shop/goods/detail',
+            url: api.goodsDetail,
             data: {
               id: carShopBean.goodsId
             },
@@ -320,7 +321,7 @@ Page({
           })
         } else {
           wx.request({
-            url: 'https://api.it120.cc/'+ app.globalData.subDomain +'/shop/goods/price',
+            url: api.goodsPrice,
             data: {
               goodsId: carShopBean.goodsId,
               propertyChildIds:carShopBean.propertyChildIds
