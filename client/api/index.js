@@ -23,5 +23,11 @@ var api = {
   addressUpdate: `${url}/user/shipping-address/update`,
   addressDelete: `${url}/user/shipping-address/delete`,
   addressDetail: `${url}/user/shipping-address/detail`,
+
+  //商品
+  goodsDetail: `${url}/shop/goods/detail`,
+  goodsPrice: `${url}/shop/goods/price`,
+  goodsReputation: `${url}/shop/goods/reputation`,
+  goodsVideo: `${url}/media/video/detail`,
 }
 module.exports = api;

@@ -2,7 +2,7 @@
 //获取应用实例
 var app = getApp();
 var WxParse = require('../../wxParse/wxParse.js');
-
+var api = require('../../api/index.js');
 Page({
   data: {
     autoplay: true,
@@ -52,7 +52,7 @@ Page({
       } 
     })
     wx.request({
-      url: 'https://api.it120.cc/'+ app.globalData.subDomain +'/shop/goods/detail',
+      url: api.goodsDetail,
       data: {
         id: e.id
       },
@@ -192,7 +192,7 @@ Page({
     // 计算当前价格
     if (canSubmit) {
       wx.request({
-        url: 'https://api.it120.cc/'+ app.globalData.subDomain +'/shop/goods/price',
+        url: api.goodsPrice,
         data: {
           goodsId: that.data.goodsDetail.basicInfo.id,
           propertyChildIds:propertyChildIds
@@ -407,7 +407,7 @@ Page({
   reputation: function (goodsId) {
     var that = this;
     wx.request({
-      url: 'https://api.it120.cc/' + app.globalData.subDomain + '/shop/goods/reputation',
+      url: api.goodsReputation,
       data: {
         goodsId: goodsId
       },
@@ -424,7 +424,7 @@ Page({
   getVideoSrc: function (videoId) {
     var that = this;
     wx.request({
-      url: 'https://api.it120.cc/' + app.globalData.subDomain + '/media/video/detail',
+      url: api.goodsVideo,
       data: {
         videoId: videoId
       },

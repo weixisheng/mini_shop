@@ -180,7 +180,7 @@ Page({
       success: function (res) {
         if (res.data.code == 20001 || res.data.code == 20002) {
           wx.showModal({
-            title: '错误',
+            title: '温馨提示',
             content: '来晚了',
             showCancel: false
           })
@@ -188,7 +188,7 @@ Page({
         }
         if (res.data.code == 20003) {
           wx.showModal({
-            title: '错误',
+            title: '温馨提示',
             content: '你领过了，别贪心哦~',
             showCancel: false
           })
@@ -196,7 +196,7 @@ Page({
         }
         if (res.data.code == 30001) {
           wx.showModal({
-            title: '错误',
+            title: '温馨提示',
             content: '您的积分不足',
             showCancel: false
           })
@@ -204,7 +204,7 @@ Page({
         }
         if (res.data.code == 20004) {
           wx.showModal({
-            title: '错误',
+            title: '温馨提示',
             content: '已过期~',
             showCancel: false
           })
@@ -218,7 +218,7 @@ Page({
           })
         } else {
           wx.showModal({
-            title: '错误',
+            title: '温馨提示',
             content: res.data.msg,
             showCancel: false
           })
