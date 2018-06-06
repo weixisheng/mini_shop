@@ -20,6 +20,7 @@ var api = {
   addressUpdate: `${url}/user/shipping-address/update`,
   addressDelete: `${url}/user/shipping-address/delete`,
   addressDetail: `${url}/user/shipping-address/detail`,
+  addressDefault: `${url}/user/shipping-address/default`,
 
   //商品
   goodsDetail: `${url}/shop/goods/detail`,
@@ -36,5 +37,7 @@ var api = {
   fetchDiscount: `${url}/discounts/fetch`,
   myCoupons: `${url}/discounts/my`,
 
+  //订单
+  createOrder: `${url}/order/create`,
 }
 module.exports = api;
