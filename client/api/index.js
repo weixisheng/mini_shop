@@ -39,5 +39,11 @@ var api = {
 
   //订单
   createOrder: `${url}/order/create`,
+  orderDetail: `${url}/order/detail`,
+  orderDelivery: `${url}/order/delivery`,
+  orderReputation: `${url}/order/reputation`,
+
+  //提现
+  withDraw: `${url}/user/withDraw/apply`,
 }
 module.exports = api;

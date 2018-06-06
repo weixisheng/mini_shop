@@ -1,4 +1,5 @@
 var app = getApp()
+var api = require('../../api/index.js')
 Page({
 
   /**
@@ -79,7 +80,7 @@ Page({
       return
     }
     wx.request({
-      url: 'https://api.it120.cc/' + app.globalData.subDomain + '/user/withDraw/apply',
+      url: api.withDraw,
       data: {
         token: wx.getStorageSync('token'),
         money: amount
