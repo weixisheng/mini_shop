@@ -1,0 +1,20 @@
+<!--pages/sign-list/index.wxml-->
+<view class='container'>
+  <view class='sign-title'>
+    <view class='sign-date'>签到日期</view>
+    <view class='sign-days'>连续签到天数</view>
+  </view>
+  <view class='sign-body'>
+    <block wx:if="{{list.length>0}}">
+      <view class='sign-item' wx:for="{{list}}" wx:key="{{index}}">
+      <view class='sign-date'>
+        {{item.dateAdd}}
+      </view>
+      <view class='sign-days'>{{item.continuous}}</view>
+    </view>
+    </block>
+    <view wx:if="{{list.length==0}}">
+      <text class='text-center'>没有更多数据了</text>
+    </view>
+  </view>
+</view>

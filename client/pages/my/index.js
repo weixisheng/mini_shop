@@ -1,5 +1,5 @@
 const app = getApp()
-
+var api = require('../../api/index.js')
 Page({
 	data: {
     balance:0,
@@ -51,7 +51,7 @@ Page({
     }
     var that = this;
     wx.request({
-      url: 'https://api.it120.cc/' + app.globalData.subDomain + '/user/wxapp/bindMobile',
+      url: api.bindMobile,
       data: {
         token: wx.getStorageSync('token'),
         encryptedData: e.detail.encryptedData,
@@ -78,7 +78,7 @@ Page({
   getUserApiInfo: function () {
     var that = this;
     wx.request({
-      url: 'https://api.it120.cc/' + app.globalData.subDomain + '/user/detail',
+      url: api.userDetail,
       data: {
         token: wx.getStorageSync('token')
       },
@@ -96,7 +96,7 @@ Page({
   getUserAmount: function () {
     var that = this;
     wx.request({
-      url: 'https://api.it120.cc/' + app.globalData.subDomain + '/user/amount',
+      url: api.userAmount,
       data: {
         token: wx.getStorageSync('token')
       },
@@ -115,7 +115,7 @@ Page({
   checkScoreSign: function () {
     var that = this;
     wx.request({
-      url: 'https://api.it120.cc/' + app.globalData.subDomain + '/score/today-signed',
+      url: api.signToday,
       data: {
         token: wx.getStorageSync('token')
       },
@@ -131,7 +131,7 @@ Page({
   scoresign: function () {
     var that = this;
     wx.request({
-      url: 'https://api.it120.cc/' + app.globalData.subDomain + '/score/sign',
+      url: api.scoreSign,
       data: {
         token: wx.getStorageSync('token')
       },

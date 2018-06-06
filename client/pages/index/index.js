@@ -1,6 +1,7 @@
 //index.js
 //获取应用实例
 var app = getApp()
+var api = require('../../api/index.js')
 Page({
   data: {
     indicatorDots: true,
@@ -33,7 +34,7 @@ Page({
   getBanner(){
     var that = this;
     wx.request({
-      url: 'https://api.it120.cc/' + app.globalData.subDomain + '/banner/list',
+      url: api.bannerList,
       data: {
         key: 'mallName'
       },
@@ -55,13 +56,10 @@ Page({
   getCategory(){
     var that = this;
     wx.request({
-      url: 'https://api.it120.cc/' + app.globalData.subDomain + '/shop/goods/category/all',
+      url: api.categoryAll,
       success: function (res) {
         var categories = [{ id: 0, name: "全部" }];
         if (res.data.code == 0) {
-          // for (var i = 0; i < res.data.data.length; i++) {
-          //   categories.push(res.data.data[i]);
-          // }
           categories = [...categories, ...res.data.data];
         }
         that.setData({
@@ -75,7 +73,7 @@ Page({
   getNotice: function () {
     var that = this;
     wx.request({
-      url: 'https://api.it120.cc/' + app.globalData.subDomain + '/notice/list',
+      url: api.noticeList,
       data: { pageSize: 5 },
       success: function (res) {
         if (res.data.code == 0) {
@@ -89,7 +87,7 @@ Page({
   getCoupons: function () {
     var that = this;
     wx.request({
-      url: 'https://api.it120.cc/' + app.globalData.subDomain + '/discounts/coupons',
+      url: api.discountCoupons,
       data: {
         type: ''
       },
@@ -145,7 +143,7 @@ Page({
     }
     var that = this;
     wx.request({
-      url: 'https://api.it120.cc/'+ app.globalData.subDomain +'/shop/goods/list',
+      url: api.goodsList,
       data: {
         categoryId: categoryId,
         nameLike: that.data.searchInput
@@ -174,7 +172,7 @@ Page({
   gitCoupon : function (e) {
     var that = this;
     wx.request({
-      url: 'https://api.it120.cc/' + app.globalData.subDomain + '/discounts/fetch',
+      url: api.fetchDiscount,
       data: {
         id: e.currentTarget.dataset.id,
         token: wx.getStorageSync('token')
