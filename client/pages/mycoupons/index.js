@@ -1,6 +1,7 @@
 //index.js
 //获取应用实例
 var app = getApp()
+var api = require('../../api/index.js')
 Page({
   data: {
     coupons:[]
@@ -13,7 +14,7 @@ Page({
   getMyCoupons: function () {
     var that = this;
     wx.request({
-      url: 'https://api.it120.cc/' + app.globalData.subDomain + '/discounts/my',
+      url: api.myCoupons,
       data: {
         token: wx.getStorageSync('token'),
         status: 0

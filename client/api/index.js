@@ -5,9 +5,7 @@ var api = {
   // 首页
   bannerList:`${url}/banner/list`,
   categoryAll: `${url}/shop/goods/category/all`,
-  discountCoupons: `${url}/discounts/coupons`,
   goodsList: `${url}/shop/goods/list`,
-  fetchDiscount: `${url}/discounts/fetch`,
   //我的
   bindMobile: `${url}/user/wxapp/bindMobile`,
   userDetail: `${url}/user/detail`,
@@ -32,6 +30,11 @@ var api = {
   //资讯
   noticeList: `${url}/notice/list`,
   noticeDetail: `${url}/notice/detail`,
+
+  //优惠券
+  discountCoupons: `${url}/discounts/coupons`,
+  fetchDiscount: `${url}/discounts/fetch`,
+  myCoupons: `${url}/discounts/my`,
 
 }
 module.exports = api;
