@@ -1,4 +1,5 @@
 var commonCityData = require('../../utils/city.js')
+var api = require('../../api/index.js')
 //获取应用实例
 var app = getApp()
 Page({
@@ -78,15 +79,9 @@ Page({
       })
       return
     }
-    var apiAddoRuPDATE = "add";
-    var apiAddid = that.data.id;
-    if (apiAddid) {
-      apiAddoRuPDATE = "update";
-    } else {
-      apiAddid = 0;
-    }
+
     wx.request({
-      url: 'https://api.it120.cc/' + app.globalData.subDomain + '/user/shipping-address/' + apiAddoRuPDATE,
+      url: that.data.id?api.addressUpdate:api.addressAdd,
       data: {
         token: wx.getStorageSync('token'),
         id: apiAddid,
@@ -184,7 +179,7 @@ Page({
       // 初始化原数据
       wx.showLoading();
       wx.request({
-        url: 'https://api.it120.cc/' + app.globalData.subDomain + '/user/shipping-address/detail',
+        url: api.addressDetail,
         data: {
           token: wx.getStorageSync('token'),
           id: id
@@ -192,14 +187,15 @@ Page({
         success: function (res) {
           wx.hideLoading();
           if (res.data.code == 0) {
+            var _r = res.data.data;
             that.setData({
               id:id,
-              addressData: res.data.data,
-              selProvince: res.data.data.provinceStr,
-              selCity: res.data.data.cityStr,
-              selDistrict: res.data.data.areaStr
+              addressData: _r,
+              selProvince: _r.provinceStr,
+              selCity: _r.cityStr,
+              selDistrict: _r.areaStr
               });
-            that.setDBSaveAddressId(res.data.data);
+            that.setDBSaveAddressId(_r);
             return;
           } else {
             wx.showModal({
@@ -242,7 +238,7 @@ Page({
       success: function (res) {
         if (res.confirm) {
           wx.request({
-            url: 'https://api.it120.cc/' + app.globalData.subDomain + '/user/shipping-address/delete',
+            url: api.addressDelete,
             data: {
               token: wx.getStorageSync('token'),
               id: id
