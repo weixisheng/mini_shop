@@ -156,10 +156,11 @@ Page({
       success: (res) => {
         wx.hideLoading();
         if (res.data.code == 0) {
+          var _r = res.data.data;
           that.setData({
-            orderList: res.data.data.orderList,
-            logisticsMap : res.data.data.logisticsMap,
-            goodsMap : res.data.data.goodsMap
+            orderList: _r.orderList,
+            logisticsMap : _r.logisticsMap,
+            goodsMap : _r.goodsMap
           });
         } else {
           this.setData({
