@@ -191,13 +191,26 @@ Page({
       this.setGoodsList(this.getSaveHide(),this.totalPrice(),!currentAllSelect,this.noSelect(),list);
    },
    jiaBtnTap:function(e){
+     var that = this;
     var index = e.currentTarget.dataset.index;
     var list = this.data.goodsList.list;
     if(index!=="" && index != null){
-      if(list[parseInt(index)].number<10){
-        list[parseInt(index)].number++; 
-        this.setGoodsList(this.getSaveHide(),this.totalPrice(),this.allSelect(),this.noSelect(),list);
-      }
+      var goodsItem = list[parseInt(index)] ;
+      var stock = 0;
+      wx.request({
+        url: api.goodsDetail,
+        data:{id:goodsItem.goodsId},
+        success:function(res){
+          stock = res.data.data.basicInfo.stores;
+          that.setData({
+            curStock: stock
+          })
+          if(list[parseInt(index)].number<stock){
+            list[parseInt(index)].number++;
+            that.setGoodsList(that.getSaveHide(), that.totalPrice(), that.allSelect(), that.noSelect(), list);
+          }
+        }
+      })
     }
    },
    jianBtnTap:function(e){
