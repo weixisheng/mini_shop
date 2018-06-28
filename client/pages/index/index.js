@@ -23,6 +23,7 @@ Page({
     searchInput: '',
   },
   onLoad: function () {
+    console.log(getCurrentPages())
     wx.setNavigationBarTitle({
       title: wx.getStorageSync('mallName')
     })
