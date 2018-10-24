@@ -59,8 +59,3 @@
     background: url(https://cdn.it120.cc/images/weappshop/add-addr.png) no-repeat left center;
     background-size: 40rpx auto;
 }
-.just-cen{
-  display: flex;
-  justify-content: center;
-  align-items: center;
-}

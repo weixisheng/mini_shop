@@ -13,7 +13,10 @@ Page({
     });
   },
   onLoad:function(){
-   
+    var that = this
+    wx.setNavigationBarTitle({
+      title: wx.getStorageSync('mallName')
+    })
   },
   onShow:function(){
     let that = this
@@ -30,9 +33,6 @@ Page({
   },
   onReady: function(){
     var that = this;
-    wx.setNavigationBarTitle({
-      title: wx.getStorageSync('mallName')
-    })
     setTimeout(function(){
       that.setData({
         remind: ''

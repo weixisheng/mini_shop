@@ -1,6 +1,5 @@
 var wxpay = require('../../utils/pay.js')
 var app = getApp()
-var api = require('../../api/index.js')
 Page({
   data:{
     statusType: ["待付款", "待发货", "待收货", "待评价", "已完成"],
@@ -31,7 +30,7 @@ Page({
         if (res.confirm) {
           wx.showLoading();
           wx.request({
-            url: api.orderClose,
+            url: 'https://api.it120.cc/' + app.globalData.subDomain + '/order/close',
             data: {
               token: wx.getStorageSync('token'),
               orderId: orderId
@@ -51,8 +50,9 @@ Page({
     var that = this;
     var orderId = e.currentTarget.dataset.id;
     var money = e.currentTarget.dataset.money;
+    var needScore = e.currentTarget.dataset.score;
     wx.request({
-      url: api.userAmount,
+      url: 'https://api.it120.cc/' + app.globalData.subDomain + '/user/amount',
       data: {
         token: wx.getStorageSync('token')
       },
@@ -60,10 +60,18 @@ Page({
         if (res.data.code == 0) {
           // res.data.data.balance
           money = money - res.data.data.balance;
+          if (res.data.data.score < needScore) {
+            wx.showModal({
+              title: '错误',
+              content: '您的积分不足，无法支付',
+              showCancel: false
+            })
+            return;
+          }
           if (money <= 0) {
             // 直接使用余额支付
             wx.request({
-              url: api.orderPay,
+              url: 'https://api.it120.cc/' + app.globalData.subDomain + '/order/pay',
               method:'POST',
               header: {
                 'content-type': 'application/x-www-form-urlencoded'
@@ -73,9 +81,7 @@ Page({
                 orderId: orderId
               },
               success: function (res2) {
-                wx.reLaunch({
-                  url: "/pages/order-list/index"
-                });
+                that.onShow();
               }
             })
           } else {
@@ -102,7 +108,7 @@ Page({
   getOrderStatistics : function () {
     var that = this;
     wx.request({
-      url: api.orderStatistics,
+      url: 'https://api.it120.cc/' + app.globalData.subDomain + '/order/statistics',
       data: { token: wx.getStorageSync('token') },
       success: (res) => {
         wx.hideLoading();
@@ -151,16 +157,15 @@ Page({
     postData.status = that.data.currentType;
     this.getOrderStatistics();
     wx.request({
-      url: api.orderList,
+      url: 'https://api.it120.cc/' + app.globalData.subDomain + '/order/list',
       data: postData,
       success: (res) => {
         wx.hideLoading();
         if (res.data.code == 0) {
-          var _r = res.data.data;
           that.setData({
-            orderList: _r.orderList,
-            logisticsMap : _r.logisticsMap,
-            goodsMap : _r.goodsMap
+            orderList: res.data.data.orderList,
+            logisticsMap : res.data.data.logisticsMap,
+            goodsMap : res.data.data.goodsMap
           });
         } else {
           this.setData({
