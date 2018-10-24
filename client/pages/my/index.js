@@ -1,5 +1,5 @@
 const app = getApp()
-var api = require('../../api/index.js')
+
 Page({
 	data: {
     balance:0,
@@ -11,32 +11,26 @@ Page({
     
 	},	
   onShow() {
-    this.getUserInfo();
-    this.setData({
-      version: app.globalData.version
-    });
+    let that = this;
+    let userInfo = wx.getStorageSync('userInfo')
+    if (!userInfo) {
+      wx.navigateTo({
+        url: "/pages/authorize/index"
+      })
+    } else {
+      that.setData({
+        userInfo: userInfo,
+        version: app.globalData.version
+      })
+    }
     this.getUserApiInfo();
     this.getUserAmount();
     this.checkScoreSign();
-  },	
-  getUserInfo: function (cb) {
-      var that = this
-      wx.login({
-        success: function () {
-          wx.getUserInfo({
-            success: function (res) {
-              that.setData({
-                userInfo: res.userInfo
-              });
-            }
-          })
-        }
-      })
   },
   aboutUs : function () {
     wx.showModal({
       title: '关于我们',
-      content: '小程序商城测试',
+      content: '本系统基于开源小程序商城系统 https://github.com/EastWorld/wechat-app-mall 搭建，祝大家使用愉快！',
       showCancel:false
     })
   },
@@ -51,7 +45,7 @@ Page({
     }
     var that = this;
     wx.request({
-      url: api.bindMobile,
+      url: 'https://api.it120.cc/' + app.globalData.subDomain + '/user/wxapp/bindMobile',
       data: {
         token: wx.getStorageSync('token'),
         encryptedData: e.detail.encryptedData,
@@ -78,7 +72,7 @@ Page({
   getUserApiInfo: function () {
     var that = this;
     wx.request({
-      url: api.userDetail,
+      url: 'https://api.it120.cc/' + app.globalData.subDomain + '/user/detail',
       data: {
         token: wx.getStorageSync('token')
       },
@@ -86,7 +80,7 @@ Page({
         if (res.data.code == 0) {
           that.setData({
             apiUserInfoMap: res.data.data,
-            userMobile: res.data.data.base.mobile||'13412341234'
+            userMobile: res.data.data.base.mobile
           });
         }
       }
@@ -96,7 +90,7 @@ Page({
   getUserAmount: function () {
     var that = this;
     wx.request({
-      url: api.userAmount,
+      url: 'https://api.it120.cc/' + app.globalData.subDomain + '/user/amount',
       data: {
         token: wx.getStorageSync('token')
       },
@@ -115,7 +109,7 @@ Page({
   checkScoreSign: function () {
     var that = this;
     wx.request({
-      url: api.signToday,
+      url: 'https://api.it120.cc/' + app.globalData.subDomain + '/score/today-signed',
       data: {
         token: wx.getStorageSync('token')
       },
@@ -131,7 +125,7 @@ Page({
   scoresign: function () {
     var that = this;
     wx.request({
-      url: api.scoreSign,
+      url: 'https://api.it120.cc/' + app.globalData.subDomain + '/score/sign',
       data: {
         token: wx.getStorageSync('token')
       },
@@ -150,27 +144,8 @@ Page({
     })
   },
   relogin:function(){
-    var that = this;
-    wx.authorize({
-      scope: 'scope.userInfo',
-      success() {
-        app.globalData.token = null;
-        that.getUserInfo();
-        wx.showModal({
-          title: '提示',
-          content: '重新登陆成功',
-          showCancel: false,
-          success: function (res) {
-            if (res.confirm) {
-              that.onShow();
-            }
-          }
-        })
-      },
-      fail(res){
-        console.log(res);
-        wx.openSetting({});
-      }
+    wx.navigateTo({
+      url: "/pages/authorize/index"
     })
   },
   recharge: function () {

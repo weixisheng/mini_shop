@@ -1,42 +1,38 @@
 //index.js
 //获取应用实例
 var app = getApp()
-var api = require('../../api/index.js')
+
 Page({
   data: {
-    goodsList: [],
-    isNeedLogistics: 0, // 是否需要物流信息
-    allGoodsPrice: 0,
-    yunPrice: 0,
-    allGoodsAndYunPrice: 0,
-    goodsJsonStr: "",
-    orderType: "cart", //订单类型，购物车下单或立即支付下单，默认是购物车，
+    totalScoreToPay: 0,
+    goodsList:[],
+    isNeedLogistics:0, // 是否需要物流信息
+    allGoodsPrice:0,
+    yunPrice:0,
+    allGoodsAndYunPrice:0,
+    goodsJsonStr:"",
+    orderType:"", //订单类型，购物车下单或立即支付下单，默认是购物车，
+    pingtuanOpenId:undefined, //拼团的话记录团号
 
     hasNoCoupons: true,
     coupons: [],
-    youhuijine: 0, //优惠券金额
-    curCoupon: null // 当前选择使用的优惠券
+    youhuijine:0, //优惠券金额
+    curCoupon:null // 当前选择使用的优惠券
   },
-  onLoad: function (query) {
-    var that = this;
-    //显示收货地址标识
-    that.setData({
-      isNeedLogistics: 1,
-      orderType: query.orderType
-    });
-  },
-  onShow: function () {
+  onShow : function () {
     var that = this;
     var shopList = [];
     //立即购买下单
-    if ("buyNow" == that.data.orderType) {
+    if ("buyNow"==that.data.orderType){
       var buyNowInfoMem = wx.getStorageSync('buyNowInfo');
+      that.data.kjId = buyNowInfoMem.kjId;
       if (buyNowInfoMem && buyNowInfoMem.shopList) {
         shopList = buyNowInfoMem.shopList
       }
-    } else {
+    }else{
       //购物车下单
       var shopCarInfoMem = wx.getStorageSync('shopCarInfo');
+      that.data.kjId = shopCarInfoMem.kjId;
       if (shopCarInfoMem && shopCarInfoMem.shopList) {
         // shopList = shopCarInfoMem.shopList
         shopList = shopCarInfoMem.shopList.filter(entity => {
@@ -49,7 +45,16 @@ Page({
     });
     that.initShippingAddress();
   },
-  getDistrictId: function (obj, aaa) {
+
+  onLoad: function (e) {
+    this.setData({
+      isNeedLogistics: 1,
+      orderType: e.orderType,
+      pingtuanOpenId: e.pingtuanOpenId
+    });
+  },
+
+  getDistrictId : function (obj, aaa){
     if (!obj) {
       return "";
     }
@@ -59,7 +64,7 @@ Page({
     return aaa;
   },
 
-  createOrder: function (e) {
+  createOrder:function (e) {
     wx.showLoading();
     var that = this;
     var loginToken = wx.getStorageSync('token') // 用户登录 token
@@ -73,6 +78,12 @@ Page({
       goodsJsonStr: that.data.goodsJsonStr,
       remark: remark
     };
+    if (that.data.kjId) {
+      postData.kjid = that.data.kjId
+    }
+    if (that.data.pingtuanOpenId) {
+      postData.pingtuanOpenId = that.data.pingtuanOpenId
+    }
     if (that.data.isNeedLogistics > 0) {
       if (!that.data.curAddressData) {
         wx.hideLoading();
@@ -102,13 +113,13 @@ Page({
 
 
     wx.request({
-      url: api.createOrder,
-      method: 'POST',
+      url: 'https://api.it120.cc/'+ app.globalData.subDomain +'/order/create',
+      method:'POST',
       header: {
         'content-type': 'application/x-www-form-urlencoded'
       },
       data: postData, // 设置请求的 参数
-      success: (res) => {
+      success: (res) =>{
         wx.hideLoading();
         if (res.data.code != 0) {
           wx.showModal({
@@ -125,6 +136,7 @@ Page({
         }
         if (!e) {
           that.setData({
+            totalScoreToPay: res.data.data.score,
             isNeedLogistics: res.data.data.isNeedLogistics,
             allGoodsPrice: res.data.data.amountTotle,
             allGoodsAndYunPrice: res.data.data.amountLogistics + res.data.data.amountTotle,
@@ -139,7 +151,7 @@ Page({
         postJsonString.keyword2 = { value: res.data.data.amountReal + '元', color: '#173177' }
         postJsonString.keyword3 = { value: res.data.data.orderNumber, color: '#173177' }
         postJsonString.keyword4 = { value: '订单已关闭', color: '#173177' }
-        postJsonString.keyword5 = { value: '您可以重新下单，请在30分钟内完成支付', color: '#173177' }
+        postJsonString.keyword5 = { value: '您可以重新下单，请在30分钟内完成支付', color:'#173177'}
         app.sendTempleMsg(res.data.data.id, -1,
           'mGVFc31MYNMoR9Z-A9yeVVYLIVGphUVcK2-S2UdZHmg', e.detail.formId,
           'pages/index/index', JSON.stringify(postJsonString));
@@ -160,16 +172,16 @@ Page({
   initShippingAddress: function () {
     var that = this;
     wx.request({
-      url: api.addressDefault,
+      url: 'https://api.it120.cc/'+ app.globalData.subDomain +'/user/shipping-address/default',
       data: {
         token: wx.getStorageSync('token')
       },
-      success: (res) => {
+      success: (res) =>{
         if (res.data.code == 0) {
           that.setData({
-            curAddressData: res.data.data
+            curAddressData:res.data.data
           });
-        } else {
+        }else{
           that.setData({
             curAddressData: null
           });
@@ -187,7 +199,7 @@ Page({
 
     for (let i = 0; i < goodsList.length; i++) {
       let carShopBean = goodsList[i];
-      if (carShopBean.logisticsType) {
+      if (carShopBean.logistics) {
         isNeedLogistics = 1;
       }
       allGoodsPrice += carShopBean.price * carShopBean.number;
@@ -205,7 +217,7 @@ Page({
       }
 
 
-      goodsJsonStrTmp += '{"goodsId":' + carShopBean.goodsId + ',"number":' + carShopBean.number + ',"propertyChildIds":"' + carShopBean.propertyChildIds + '","logisticsType":0, "inviter_id":' + inviter_id + '}';
+      goodsJsonStrTmp += '{"goodsId":' + carShopBean.goodsId + ',"number":' + carShopBean.number + ',"propertyChildIds":"' + carShopBean.propertyChildIds + '","logisticsType":0, "inviter_id":' + inviter_id +'}';
       goodsJsonStr += goodsJsonStrTmp;
 
 
@@ -220,21 +232,21 @@ Page({
   },
   addAddress: function () {
     wx.navigateTo({
-      url: "/pages/address-add/index"
+      url:"/pages/address-add/index"
     })
   },
   selectAddress: function () {
     wx.navigateTo({
-      url: "/pages/select-address/index"
+      url:"/pages/select-address/index"
     })
   },
   getMyCoupons: function () {
     var that = this;
     wx.request({
-      url: api.myCoupons,
+      url: 'https://api.it120.cc/' + app.globalData.subDomain + '/discounts/my',
       data: {
         token: wx.getStorageSync('token'),
-        status: 0
+        status:0
       },
       success: function (res) {
         if (res.data.code == 0) {
@@ -256,7 +268,7 @@ Page({
     if (selIndex == -1) {
       this.setData({
         youhuijine: 0,
-        curCoupon: null
+        curCoupon:null
       });
       return;
     }

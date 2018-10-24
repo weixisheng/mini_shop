@@ -1,7 +1,6 @@
 //index.js
 //获取应用实例
 var app = getApp()
-var api = require('../../api/index.js')
 Page({
   data: {},
   onLoad: function (e) {
@@ -11,7 +10,7 @@ Page({
   onShow: function () {
     var that = this;
     wx.request({
-      url: api.orderDetail,
+      url: 'https://api.it120.cc/' + app.globalData.subDomain + '/order/detail',
       data: {
         token: wx.getStorageSync('token'),
         id: that.data.orderId

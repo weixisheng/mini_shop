@@ -4,7 +4,7 @@
 .coupons-list{
     width: 100%;
     background-color: #fff;
-    margin-top: 20rpx;
+    padding-top: 20rpx;
 }
 
 .bottom-box{
@@ -33,4 +33,15 @@
   font-size: 30rpx;
   line-height: 50rpx;
   color: #fff;
+}
+.empty-data{
+  position: absolute;
+  left: 0;
+  bottom: 100rpx;
+  top: 0;
+  width: 100%;
+  display:flex;
+  justify-content:center;
+  align-items:center;
+
 }

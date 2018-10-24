@@ -1,5 +1,4 @@
 var commonCityData = require('../../utils/city.js')
-var api = require('../../api/index.js')
 //获取应用实例
 var app = getApp()
 Page({
@@ -79,9 +78,15 @@ Page({
       })
       return
     }
-
+    var apiAddoRuPDATE = "add";
+    var apiAddid = that.data.id;
+    if (apiAddid) {
+      apiAddoRuPDATE = "update";
+    } else {
+      apiAddid = 0;
+    }
     wx.request({
-      url: that.data.id?api.addressUpdate:api.addressAdd,
+      url: 'https://api.it120.cc/' + app.globalData.subDomain + '/user/shipping-address/' + apiAddoRuPDATE,
       data: {
         token: wx.getStorageSync('token'),
         id: apiAddid,
@@ -179,7 +184,7 @@ Page({
       // 初始化原数据
       wx.showLoading();
       wx.request({
-        url: api.addressDetail,
+        url: 'https://api.it120.cc/' + app.globalData.subDomain + '/user/shipping-address/detail',
         data: {
           token: wx.getStorageSync('token'),
           id: id
@@ -187,15 +192,14 @@ Page({
         success: function (res) {
           wx.hideLoading();
           if (res.data.code == 0) {
-            var _r = res.data.data;
             that.setData({
               id:id,
-              addressData: _r,
-              selProvince: _r.provinceStr,
-              selCity: _r.cityStr,
-              selDistrict: _r.areaStr
+              addressData: res.data.data,
+              selProvince: res.data.data.provinceStr,
+              selCity: res.data.data.cityStr,
+              selDistrict: res.data.data.areaStr
               });
-            that.setDBSaveAddressId(_r);
+            that.setDBSaveAddressId(res.data.data);
             return;
           } else {
             wx.showModal({
@@ -238,7 +242,7 @@ Page({
       success: function (res) {
         if (res.confirm) {
           wx.request({
-            url: api.addressDelete,
+            url: 'https://api.it120.cc/' + app.globalData.subDomain + '/user/shipping-address/delete',
             data: {
               token: wx.getStorageSync('token'),
               id: id
@@ -261,27 +265,32 @@ Page({
         let cityName = res.cityName;
         let diatrictName = res.countyName;
         let retSelIdx = 0;
+
         for (var i = 0; i < commonCityData.cityData.length; i++) {
           if (provinceName == commonCityData.cityData[i].name) {
+            let eventJ = { detail: { value:i }};
+            that.bindPickerProvinceChange(eventJ);
             that.data.selProvinceIndex = i;
             for (var j = 0; j < commonCityData.cityData[i].cityList.length; j++) {
-              if (cityName == commonCityData.cityData[i].cityList[j].id) {
-                that.data.selCityIndex = j;
+              if (cityName == commonCityData.cityData[i].cityList[j].name) {
+                //that.data.selCityIndex = j;
+                eventJ = { detail: { value: j } };
+                that.bindPickerCityChange(eventJ);
                 for (var k = 0; k < commonCityData.cityData[i].cityList[j].districtList.length; k++) {
-                  if (diatrictName == commonCityData.cityData[i].cityList[j].districtList[k].id) {
-                    that.data.selDistrictIndex = k;
+                  if (diatrictName == commonCityData.cityData[i].cityList[j].districtList[k].name) {
+                    //that.data.selDistrictIndex = k;
+                    eventJ = { detail: { value: k } };
+                    that.bindPickerChange(eventJ);
                   }
                 }
               }
             }
+            
           }
         }
 
         that.setData({
           wxaddress: res,
-          selProvince: provinceName,
-          selCity: cityName,
-          selDistrict: diatrictName
         });
       }
     })

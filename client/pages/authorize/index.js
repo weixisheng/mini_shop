@@ -65,7 +65,7 @@ Page({
   
   },
   bindGetUserInfo: function (e) {
-    if (!e.detail.userInfo) {
+    if (!e.detail.userInfo){
       return;
     }
     wx.setStorageSync('userInfo', e.detail.userInfo)
@@ -85,7 +85,7 @@ Page({
             wx.removeStorageSync('token')
             that.login();
           } else {
-            // 回到原来的地方
+            // 回到原来的地方放
             wx.navigateBack();
           }
         }
@@ -117,8 +117,7 @@ Page({
             }
             wx.setStorageSync('token', res.data.data.token)
             wx.setStorageSync('uid', res.data.data.uid)
-            app.globalData.token = res.data.data.token
-            // 回到原来的地方
+            // 回到原来的地方放
             wx.navigateBack();
           }
         })

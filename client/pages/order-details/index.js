@@ -1,5 +1,4 @@
 var app = getApp();
-var api = require('../../api/index.js')
 Page({
     data:{
       orderId:0,
@@ -16,7 +15,7 @@ Page({
     onShow : function () {
       var that = this;
       wx.request({
-        url: api.orderDetail,
+        url: 'https://api.it120.cc/' + app.globalData.subDomain + '/order/detail',
         data: {
           token: wx.getStorageSync('token'),
           id: that.data.orderId
@@ -64,9 +63,9 @@ Page({
             if (res.confirm) {
               wx.showLoading();
               wx.request({
-                url: api.orderDelivery,
+                url: 'https://api.it120.cc/' + app.globalData.subDomain + '/order/delivery',
                 data: {
-                  token: app.globalData.token,
+                  token: wx.getStorageSync('token'),
                   orderId: orderId
                 },
                 success: (res) => {
@@ -93,7 +92,7 @@ Page({
       let that = this;
       let formId = e.detail.formId;
       let postJsonString = {};
-      postJsonString.token = app.globalData.token;
+      postJsonString.token = wx.getStorageSync('token');
       postJsonString.orderId = this.data.orderId;
       let reputations = [];
       let i = 0;
@@ -113,7 +112,7 @@ Page({
       postJsonString.reputations = reputations;
       wx.showLoading();
       wx.request({
-        url: api.orderReputation,
+        url: 'https://api.it120.cc/' + app.globalData.subDomain + '/order/reputation',
         data: {
           postJsonString: postJsonString
         },
